@@ -2,218 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>P2P Protocol + Multi-Resolution Stream & 64MB Files</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Communicator</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
     <!-- PeerJS Library -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <style>
-        :root {
-            --bg: #0d0f18;
-            --surface: #151824;
-            --surface-hover: #1e2235;
-            --primary: #8b5cf6;
-            --primary-hover: #7c3aed;
-            --accent: #06b6d4;
-            --text: #f3f4f6;
-            --muted: #9ca3af;
-            --border: #2a2f45;
-            --success: #10b981;
-            --danger: #ef4444;
-            --radius: 0px;
-            --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: var(--font);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1100px;
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 20px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 20px;
-            border-radius: var(--radius);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-
-        h2, h3, h4 { margin-top: 0; letter-spacing: 0.5px; }
-        
-        button, input, select, label.file-btn {
-            background: var(--bg);
-            color: var(--text);
-            border: 1px solid var(--border);
-            padding: 10px 14px;
-            font-family: var(--font);
-            border-radius: var(--radius);
-            outline: none;
-            box-sizing: border-box;
-            font-size: 0.95em;
-            transition: all 0.2s ease;
-        }
-
-        button, label.file-btn {
-            background: var(--primary);
-            border-color: var(--primary);
-            cursor: pointer;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        button:hover:not(:disabled), label.file-btn:hover {
-            background: var(--primary-hover);
-        }
-
-        button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        input[type="text"], select { width: 100%; margin-bottom: 10px; }
-        input[type="text"]:focus, select:focus { border-color: var(--primary); }
-
-        .panel {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: var(--radius);
-        }
-
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .peer-list {
-            flex-grow: 1;
-            overflow-y: auto;
-            max-height: 250px;
-            border: 1px solid var(--border);
-            padding: 5px;
-            border-radius: var(--radius);
-            background: var(--surface);
-        }
-
-        .peer-item {
-            padding: 8px 10px;
-            margin-bottom: 4px;
-            border-radius: var(--radius);
-            border: 1px solid transparent;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background 0.15s;
-        }
-
-        .peer-item:hover { background: var(--surface-hover); border-color: var(--border); }
-
-        .chat-area {
-            display: flex;
-            flex-direction: column;
-            height: 720px;
-        }
-
-        #log {
-            flex-grow: 1;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            overflow-y: auto;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: var(--radius);
-            font-size: 0.95em;
-        }
-
-        .msg { margin-bottom: 8px; word-break: break-all; line-height: 1.4; }
-        .msg strong { color: var(--accent); }
-        
-        .controls-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .stats {
-            font-size: 0.85em;
-            color: var(--muted);
-            margin-top: 5px;
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            grid-column: 1 / -1;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 15px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 2px 8px;
-            font-size: 0.75em;
-            border-radius: var(--radius);
-            background: var(--success);
-            color: #fff;
-            font-weight: bold;
-            vertical-align: middle;
-        }
-
-        input[type="file"] { display: none; }
-
-        #video-container {
-            margin-bottom: 10px;
-            background: #000;
-            border: 1px solid var(--border);
-            display: none;
-            position: relative;
-            text-align: center;
-        }
-        video {
-            width: 100%;
-            max-height: 200px;
-            object-fit: contain;
-            display: block;
-        }
-    </style>
 </head>
 <body>
 
     <div class="container">
         <!-- Top bar -->
         <div class="top-bar">
-            <h2>P2P Protocol + Multi-Res Stream & 64MB <span class="badge" id="connection-status">Offline</span></h2>
+            <h2>P2P Communicator <span class="badge" id="connection-status">Offline</span></h2>
             <div>
-                <button id="export-btn" style="background: transparent; border-color: var(--border);">Eksportuj .sav</button>
+                <button id="export-btn" style="background: transparent; border-color: var(--border);">Export .sav</button>
             </div>
         </div>
 
         <!-- Left Sidebar -->
         <div class="sidebar">
             <div class="panel">
-                <h3>Twoja Tożsamość</h3>
-                <label style="font-size: 0.85em; color: var(--muted);">Nazwa użytkownika:</label>
+                <h3>Your Identity</h3>
+                <label style="font-size: 0.85em; color: var(--muted);">Username:</label>
                 <input type="text" id="username-input" value="Anon" maxlength="16">
-                <label style="font-size: 0.85em; color: var(--muted);">Własne ID:</label>
+                <label style="font-size: 0.85em; color: var(--muted);">Custom ID:</label>
                 <div style="display: flex; gap: 5px;">
-                    <input type="text" id="custom-id-input" placeholder="Losowe" maxlength="8" style="text-transform: uppercase; margin-bottom:0;">
-                    <button id="set-id-btn" style="padding: 8px 12px;">Ustaw</button>
+                    <input type="text" id="custom-id-input" placeholder="Random" maxlength="8" style="text-transform: uppercase; margin-bottom:0;">
+                    <button id="set-id-btn" style="padding: 8px 12px;">Set</button>
                 </div>
-                <p style="margin: 8px 0 0 0; font-size: 0.9em;">Twoje ID: <strong id="my-id" style="color: var(--accent);">...</strong></p>
+                <p style="margin: 8px 0 0 0; font-size: 0.9em;">Your ID: <strong id="my-id" style="color: var(--accent);">...</strong></p>
             </div>
 
             <div class="panel" style="flex-grow:1; display:flex; flex-direction:column; margin-bottom:0;">
-                <h3>Konwersacje</h3>
+                <h3>Conversations</h3>
                 <div class="peer-list" id="history-list"></div>
             </div>
         </div>
@@ -221,37 +43,37 @@
         <!-- Right Main Chat -->
         <div class="chat-area">
             <div class="panel" style="margin-bottom: 10px;">
-                <h3>Połącz z użytkownikiem</h3>
+                <h3>Connect to Peer</h3>
                 <div style="display: flex; gap: 10px;">
-                    <input type="text" id="target-id" placeholder="Wpisz ID peera (np. A1B2C)" style="text-transform: uppercase; margin-bottom:0;">
-                    <button id="connect-btn">Połącz</button>
+                    <input type="text" id="target-id" placeholder="Enter peer ID (e.g., A1B2C)" style="text-transform: uppercase; margin-bottom:0;">
+                    <button id="connect-btn">Connect</button>
                 </div>
             </div>
 
-            <!-- Podgląd wideo streamu -->
+            <!-- Video Stream Preview -->
             <div id="video-container" class="panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px; border-bottom: 1px solid var(--border);">
-                    <span style="font-size: 0.8em; color: var(--muted);">Strumień wideo</span>
-                    <button id="fullscreen-btn" style="padding: 2px 8px; font-size: 0.75em; background: transparent; border-color: var(--border);">Pełny ekran</button>
+                    <span style="font-size: 0.8em; color: var(--muted);">Video Stream</span>
+                    <button id="fullscreen-btn" style="padding: 2px 8px; font-size: 0.75em; background: transparent; border-color: var(--border);">Fullscreen</button>
                 </div>
                 <video id="remote-video" autoplay playsinline></video>
-                <button id="stop-stream-btn" style="background: var(--danger); border-color: var(--danger); width: 100%; margin-top: 5px; display: none; padding: 4px;">Zatrzymaj Stream</button>
+                <button id="stop-stream-btn" style="background: var(--danger); border-color: var(--danger); width: 100%; margin-top: 5px; display: none; padding: 4px;">Stop Stream</button>
             </div>
 
             <div class="panel" style="flex-grow: 1; display: flex; flex-direction: column; margin-bottom: 10px;">
-                <h3>Aktywny Czat</h3>
+                <h3>Active Chat</h3>
                 <div id="log"></div>
-                <div class="stats" id="transfer-stats">Wysłano: 0 KB | Odebrano: 0 KB</div>
+                <div class="stats" id="transfer-stats">Sent: 0 KB | Received: 0 KB</div>
             </div>
 
-            <!-- Kontrolki -->
+            <!-- Controls -->
             <div class="controls-row">
-                <input type="text" id="message-input" placeholder="Napisz wiadomość..." style="margin-bottom:0;" disabled>
-                <button id="send-btn" disabled>Wyślij</button>
+                <input type="text" id="message-input" placeholder="Type a message..." style="margin-bottom:0;" disabled>
+                <button id="send-btn" disabled>Send</button>
             </div>
             
             <div class="controls-row">
-                <label for="file-input" class="file-btn" id="file-label" style="flex: 1; opacity: 0.4; pointer-events: none;">Plik (max 64MB)</label>
+                <label for="file-input" class="file-btn" id="file-label" style="flex: 1; opacity: 0.4; pointer-events: none;">File (max 64MB)</label>
                 <input type="file" id="file-input" disabled>
                 <select id="resolution-select" style="flex: 1; margin-bottom: 0;">
                     <option value="144">144p</option>
@@ -259,6 +81,7 @@
                     <option value="360">360p</option>
                     <option value="480">480p</option>
                     <option value="720">720p</option>
+                    <option value="1080">1080p</option>
                 </select>
                 <button id="stream-btn" style="flex: 1; background: var(--accent); border-color: var(--accent);" disabled>Stream</button>
             </div>
@@ -266,7 +89,7 @@
     </div>
 
     <script>
-        const MAX_FILE_SIZE = 64 * 1024 * 1024; // 64 MB w bajtach
+        const MAX_FILE_SIZE = 64 * 1024 * 1024; // 64 MB in bytes
 
         function generateHexId() {
             return Math.floor(Math.random() * 1048576).toString(16).padStart(5, '0').toUpperCase();
@@ -313,13 +136,13 @@
                 localStorage.setItem('p2p_my_id', idToUse);
                 statusBadge.innerText = "Online";
                 statusBadge.style.background = "var(--success)";
-                log(`Twój węzeł jest aktywny z ID: ${idToUse}`);
+                log(`Your node is active with ID: ${idToUse}`);
                 renderHistoryList();
             });
 
             peer.on('error', (err) => {
-                alert("Błąd PeerJS (ID może być zajęte): " + err.type);
-                statusBadge.innerText = "Błąd ID";
+                alert("PeerJS Error (ID might be taken): " + err.type);
+                statusBadge.innerText = "ID Error";
                 statusBadge.style.background = "#ef4444";
             });
 
@@ -327,7 +150,7 @@
                 conn = incomingConn;
                 activeTargetHex = conn.peer.replace('p2p-proto-', '');
                 setupConnection();
-                log(`Nawiązano połączenie przychodzące od: ${activeTargetHex}`, 'SUKCES');
+                log(`Incoming connection established from: ${activeTargetHex}`, 'SUCCESS');
             });
 
             peer.on('call', (call) => {
@@ -337,7 +160,7 @@
                     remoteVideo.srcObject = remoteStream;
                     videoContainer.style.display = 'block';
                     document.getElementById('stop-stream-btn').style.display = 'block';
-                    log(`Odebrano strumień wideo od ${call.peer.replace('p2p-proto-', '')}`, 'STREAM');
+                    log(`Received video stream from ${call.peer.replace('p2p-proto-', '')}`, 'STREAM');
                     
                     startExactStatsPolling(call.peerConnection, false);
                 });
@@ -352,7 +175,7 @@
         document.getElementById('set-id-btn').addEventListener('click', () => {
             let newId = document.getElementById('custom-id-input').value.trim().toUpperCase();
             if (newId.length < 3) {
-                alert("ID musi mieć co najmniej 3 znaki.");
+                alert("ID must be at least 3 characters long.");
                 return;
             }
             initPeer(newId);
@@ -364,7 +187,7 @@
         }
 
         function updateStats() {
-            statsDiv.innerText = `Wysłano: ${(bytesSent / 1024).toFixed(2)} KB | Odebrano: ${(bytesReceived / 1024).toFixed(2)} KB`;
+            statsDiv.innerText = `Sent: ${(bytesSent / 1024).toFixed(2)} KB | Received: ${(bytesReceived / 1024).toFixed(2)} KB`;
         }
 
         function saveMessageToDb(targetHex, senderName, text) {
@@ -378,13 +201,13 @@
             historyList.innerHTML = '';
             const keys = Object.keys(db);
             if (keys.length === 0) {
-                historyList.innerHTML = '<div class="peer-item" style="color:var(--muted); text-align:center;">Brak historii rozmów</div>';
+                historyList.innerHTML = '<div class="peer-item" style="color:var(--muted); text-align:center;">No chat history</div>';
                 return;
             }
             keys.forEach(hex => {
                 const item = document.createElement('div');
                 item.className = 'peer-item';
-                item.innerHTML = `<strong>ID: ${hex}</strong> <span style="float:right; color:var(--muted);">${db[hex].messages.length} wiad.</span>`;
+                item.innerHTML = `<strong>ID: ${hex}</strong> <span style="float:right; color:var(--muted);">${db[hex].messages.length} msgs</span>`;
                 item.onclick = () => loadChatSession(hex);
                 historyList.appendChild(item);
             });
@@ -406,7 +229,7 @@
             updateStats();
 
             let fullTargetId = 'p2p-proto-' + hex;
-            log(`Łączenie z sesją ${hex}...`);
+            log(`Connecting to session ${hex}...`);
             conn = peer.connect(fullTargetId);
             setupConnection();
         }
@@ -414,7 +237,7 @@
         document.getElementById('connect-btn').addEventListener('click', () => {
             let targetInput = document.getElementById('target-id').value.trim().toUpperCase();
             if (targetInput.length === 0) {
-                alert('Wpisz ID użytkownika docelowego');
+                alert('Please enter target peer ID');
                 return;
             }
             loadChatSession(targetInput);
@@ -434,7 +257,7 @@
         function setupConnection() {
             conn.on('open', () => {
                 setControlsActive(true);
-                log(`Połączenie P2P aktywne z ${activeTargetHex}`, 'SUKCES');
+                log(`P2P connection active with ${activeTargetHex}`, 'SUCCESS');
             });
 
             conn.on('data', (data) => {
@@ -444,7 +267,7 @@
 
                     const blob = new Blob([data.fileBuffer]);
                     const blobUrl = URL.createObjectURL(blob);
-                    const fileMsg = `[PLIK]: <a href="${blobUrl}" download="${data.fileName}" style="color: var(--accent);">${data.fileName}</a> (${(data.fileBuffer.byteLength / (1024*1024)).toFixed(2)} MB)`;
+                    const fileMsg = `[FILE]: <a href="${blobUrl}" download="${data.fileName}" style="color: var(--accent);">${data.fileName}</a> (${(data.fileBuffer.byteLength / (1024*1024)).toFixed(2)} MB)`;
                     
                     log(fileMsg, activeTargetHex);
                     saveMessageToDb(activeTargetHex, activeTargetHex, fileMsg);
@@ -461,7 +284,7 @@
 
             conn.on('close', () => {
                 setControlsActive(false);
-                log(`Połączenie zostało zamknięte.`);
+                log(`Connection closed.`);
             });
         }
 
@@ -482,8 +305,8 @@
                 db[activeTargetHex].sentBytes = bytesSent;
                 updateStats();
 
-                log(payload, 'Ty');
-                saveMessageToDb(activeTargetHex, 'Ty', payload);
+                log(payload, 'You');
+                saveMessageToDb(activeTargetHex, 'You', payload);
                 document.getElementById('message-input').value = '';
             }
         }
@@ -493,13 +316,13 @@
             if (!file) return;
 
             if (file.size > MAX_FILE_SIZE) {
-                alert(`Plik za duży! Maksymalnie do 64 MB. Twój plik ma ${(file.size / (1024*1024)).toFixed(2)} MB.`);
+                alert(`File too large! Maximum limit is 64 MB. Your file is ${(file.size / (1024*1024)).toFixed(2)} MB.`);
                 e.target.value = '';
                 return;
             }
 
             if (conn && conn.open) {
-                log(`Wysyłanie pliku: ${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)...`);
+                log(`Sending file: ${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)...`);
                 
                 const reader = new FileReader();
                 reader.onload = function(event) {
@@ -511,14 +334,14 @@
                     db[activeTargetHex].sentBytes = bytesSent;
                     updateStats();
 
-                    const localFileMsg = `[WYSŁANO PLIK]: ${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)`;
-                    log(localFileMsg, 'Ty');
-                    saveMessageToDb(activeTargetHex, 'Ty', localFileMsg);
+                    const localFileMsg = `[SENT FILE]: ${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)`;
+                    log(localFileMsg, 'You');
+                    saveMessageToDb(activeTargetHex, 'You', localFileMsg);
                     e.target.value = '';
                 };
                 reader.readAsArrayBuffer(file);
             } else {
-                alert("Brak aktywnego połączenia P2P.");
+                alert("No active P2P connection.");
             }
         });
 
@@ -559,18 +382,19 @@
                         }
                     });
                 } catch (e) {
-                    console.error("Błąd getStats:", e);
+                    console.error("getStats error:", e);
                 }
             }, 1000);
         }
 
-        // Mapowanie wybranej rozdzielczości na szerokość, wysokość i klatkaż
+        // Resolution map: width, height, frame rate
         const resolutions = {
             "144": { width: 256, height: 144, frameRate: 10 },
             "240": { width: 426, height: 240, frameRate: 15 },
             "360": { width: 640, height: 360, frameRate: 20 },
             "480": { width: 854, height: 480, frameRate: 24 },
-            "720": { width: 1280, height: 720, frameRate: 30 }
+            "720": { width: 1280, height: 720, frameRate: 30 },
+            "1080": { width: 1920, height: 1080, frameRate: 30 }
         };
 
         document.getElementById('stream-btn').addEventListener('click', async () => {
@@ -596,7 +420,7 @@
                 videoContainer.style.display = 'block';
                 remoteVideo.srcObject = localStream;
                 document.getElementById('stop-stream-btn').style.display = 'block';
-                log(`Rozpoczęto strumieniowanie ekranu (${resChoice}p)...`, "STREAM");
+                log(`Started screen streaming (${resChoice}p)...`, "STREAM");
 
                 startExactStatsPolling(call.peerConnection, true);
 
@@ -606,11 +430,11 @@
 
             } catch (err) {
                 console.error(err);
-                alert("Nie udało się udostępnić ekranu.");
+                alert("Failed to share screen.");
             }
         });
 
-        // Obsługa pełnego ekranu dla wideo
+        // Fullscreen video toggle
         document.getElementById('fullscreen-btn').addEventListener('click', () => {
             if (remoteVideo.requestFullscreen) {
                 remoteVideo.requestFullscreen();
@@ -637,7 +461,7 @@
             videoContainer.style.display = 'none';
             remoteVideo.srcObject = null;
             document.getElementById('stop-stream-btn').style.display = 'none';
-            log("Zatrzymano strumieniowanie ekranu.", "STREAM");
+            log("Stopped screen streaming.", "STREAM");
         }
 
         function stopRemoteStreamView() {
