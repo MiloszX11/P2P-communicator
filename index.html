@@ -25,7 +25,7 @@
             <div class="panel">
                 <h3>Your Identity</h3>
                 <label style="font-size: 0.85em; color: var(--muted);">Username:</label>
-                <input type="text" id="username-input" value="Anon" maxlength="16">
+                <input type="text" id="username-input" value="Receiver" maxlength="16">
                 <label style="font-size: 0.85em; color: var(--muted);">Custom ID:</label>
                 <div style="display: flex; gap: 5px;">
                     <input type="text" id="custom-id-input" placeholder="Random" maxlength="8" style="text-transform: uppercase; margin-bottom:0;">
@@ -294,7 +294,7 @@
         });
 
         function sendMessage() {
-            let username = document.getElementById('username-input').value.trim() || "Anon";
+            let username = document.getElementById('username-input').value.trim() || "Receiver";
             const msg = document.getElementById('message-input').value;
             if (msg && conn && conn.open) {
                 const payload = `${username}: ${msg}`;
